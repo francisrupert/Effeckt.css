@@ -120,7 +120,9 @@ module.exports = function(grunt) {
       demo: {
         files: [
           { expand: true, cwd: './css', src: ['./**/*.*'], dest: 'dist/assets/css' },
-          { expand: true, cwd: './js', src: ['./**/*.*'], dest: 'dist/assets/js' }
+          { expand: true, cwd: './js', src: ['./**/*.*'], dest: 'dist/assets/js' },
+          { expand: true, flatten: true, cwd: './bower_components/jQuery', src:['./dist/*.min.*'], dest: 'dist/assets/js/libs/' },
+          { expand: true, flatten: true, cwd: './bower_components/modernizr', src:['./modernizr.js'], dest: 'dist/assets/js/libs/' }
         ]
       },
       css: {
@@ -130,6 +132,8 @@ module.exports = function(grunt) {
       },
       js: {
         files: [
+          { expand: true, flatten: true, cwd: './bower_components/jQuery', src: ['./dist/*.min.*'], dest: 'dist/assets/js/libs/' },
+          { expand: true, flatten: true, cwd: './bower_components/modernizr', src: ['./modernizr.js'], dest: 'dist/assets/js/libs/' },
           { expand: true, cwd: './js', src: ['./**/*.*'], dest: 'dist/assets/js' }
         ]
       }
@@ -161,7 +165,19 @@ module.exports = function(grunt) {
       options: {
         base: 'dist'
       },
-      src: '**/*'
+      forked: {
+        options: {
+          base: 'dist'
+        },
+        src: ['**/*']
+      },
+      remote: {
+        options: {
+          base: 'dist',
+          repo: 'https://github.com/h5bp/Effeckt.css'
+        },
+        src: ['**/*']
+      }
     }
 
   });
@@ -173,5 +189,5 @@ module.exports = function(grunt) {
   grunt.registerTask('js', ['copy:js', 'concat']);
   grunt.registerTask('dev', ['connect', 'watch']);
   grunt.registerTask('demo', ['copy:demo', 'assemble:demo']);
-  grunt.registerTask('deploy', ['gh-pages']);
+  grunt.registerTask('deploy', ['gh-pages:remote']);
 };
